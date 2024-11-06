@@ -1,0 +1,34 @@
+{
+  "expo": {
+    "name": "masher",
+    "slug": "masher",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./src/assets/masherIcon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./src/assets/smile.jpg",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.krish_khare.masher"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-secure-store",
+      [
+        "expo-font"
+      ]
+    ]
+  }
+}
