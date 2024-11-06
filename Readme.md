@@ -4,12 +4,12 @@ For this i am keeping backend separate for db server and chat server for scalabi
 
 Some screeenshots and video giving below of my mobile chat app-
 
-<img src="1.jpg">
-<img src="2.jpg">
-<img src="3.jpg">
-<img src="4.jpg">
-<img src="5.jpg">
-<img src="6.jpg">
-<img src="7.jpg">
-<img src="8.jpg">
-<img src="vid.gif">
+<img src="md/1.jpg">
+<img src="md/2.jpg">
+<img src="md/3.jpg">
+<img src="md/4.jpg">
+<img src="md/5.jpg">
+<img src="md/6.jpg">
+<img src="md/7.jpg">
+<img src="md/8.jpg">
+<img src="md/vid.gif">
