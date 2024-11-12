@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
+import TabBarIcon from "./TabBarIcon";
 
 export default function Message({isSender, message}: {isSender: boolean, message: string}) {
   return (
@@ -9,7 +10,14 @@ export default function Message({isSender, message}: {isSender: boolean, message
 
     {isSender ? (
 
+      // <View style={{flexDirection: 'row', alignItems: 'center'}}>
+      <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+
+      <View style={{marginRight: 5}}>
+      <TabBarIcon name="check" size={15} color="gray"/>
+      </View>
       <Text style={styles.time}>{new Date().toLocaleTimeString()}</Text>
+      </View>
 
     ) : (
         <View>
@@ -18,7 +26,9 @@ export default function Message({isSender, message}: {isSender: boolean, message
         {/* <Image */}
             </View>
 
+
     )}
+
 
   </View>
   );
@@ -56,7 +66,7 @@ const styles = StyleSheet.create({
   time: {
     fontSize: 12,
     color: "#666",
-    marginTop: 5,
+    // marginTop: 5,
     alignSelf: 'flex-end'
   },
 

@@ -2,9 +2,11 @@ import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
 
 type MessagesCardElementProps = {
-  name: string;
+  conversationId: string;
+  otherParticipant: string;
+  otherParticipantName: string;
   imageUrl: string;
-  lastMsg: string;
+  lastMessage: string;
 
   onClick: ()=> void;
 //   bgColor: string | undefined;
@@ -13,9 +15,11 @@ type MessagesCardElementProps = {
 };
 
 export default function MessagesCardElement({
-  name,
+  conversationId,
+  otherParticipant,
+  otherParticipantName,
   imageUrl,
-  lastMsg,
+  lastMessage,
   onClick
 //   bgColor,
 //   pressedColor,
@@ -41,6 +45,7 @@ export default function MessagesCardElement({
 
   return (
     <Pressable
+    key={conversationId}
     android_ripple={{color: 'whitesmoke'}}
       onPress={onClick}
       // style={({ pressed }) => [
@@ -79,8 +84,8 @@ export default function MessagesCardElement({
         />
 
         <View style={styles.nameOccDiv}>
-          <Text style={styles.name}>{name}</Text>
-          <Text style={styles.lastMsg} numberOfLines={1}>{lastMsg}</Text>
+          <Text style={styles.name}>{otherParticipantName}</Text>
+          <Text style={styles.lastMessage} numberOfLines={1}>{lastMessage}</Text>
         </View>
       </View>
     </Pressable>
@@ -114,7 +119,7 @@ const styles = StyleSheet.create({
     // color: "#FFFFFF",
     fontFamily: "Dosis_600SemiBold",
   },
-  lastMsg: {
+  lastMessage: {
     fontSize: 14,
     // color: "#FFFFFF",
     color: "gray",

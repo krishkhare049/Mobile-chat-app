@@ -48,7 +48,8 @@ export default function Login({ navigation }: LoginProps) {
     axios
       .post(
         // "http://localhost:5000/createAccount",
-        API_URL + "/logInToAccount",
+        // API_URL + "/logInToAccount",
+        API_URL + "/api/auth/login",
         {
           login_email: loginEmail,
           login_password: loginPassword,

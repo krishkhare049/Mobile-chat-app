@@ -5,14 +5,26 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import MessagingScreenCustomHeader from "../components/MessagingScreenCustomHeader";
 import { Surface, TextInput } from "react-native-paper";
 import Message from "../components/Message";
 import TabBarIcon from "../components/TabBarIcon";
+import axios from "axios";
+import { RootStackParamList } from "../MainComponent";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-// export default function MessagingScreen({userId}: {userId: string}) {
-export default function MessagingScreen() {
+let API_URL = process.env.EXPO_PUBLIC_API_URL;
+
+type MessagingScreenProps = NativeStackScreenProps<RootStackParamList, "MessagingScreen">;
+
+// export default function MessagingScreen({conversationId, otherParticipant}: {conversationId: string, otherParticipant: string}) {
+export default function MessagingScreen({route}: MessagingScreenProps) {
+
+  const { conversationId, otherParticipant } =  route.params || { conversationId: '', otherParticipant: '' };
+
+
+// export default function MessagingScreen() {
   const messages = [
     { text: "Hi! Krish", isSender: true },
     { text: "Hello! How are you?", isSender: false },
@@ -290,6 +302,51 @@ export default function MessagingScreen() {
 
   const [text, setText] = useState("");
 
+  const [messagesData, setMessagesData] = useState([])
+
+  const skip = useRef(0);
+
+  const loadConversationMessages = () =>{
+    axios
+    .get("/api/conversations/getConversationAllMessages/" + conversationId + '/' + skip)
+    .then((response) => {
+      setMessagesData(response.data);
+    })
+    .catch((error) => console.log("Error" + error));
+  }
+
+  useEffect(()=>{
+    // Load conversation messages-
+    loadConversationMessages();
+  })
+
+
+  const sendMessage = () =>{
+    axios
+    .post(
+      // "http://localhost:5000/createAccount",
+      // API_URL + "/logInToAccount",
+      API_URL + "/api/messages/addMessage",
+      {
+        receiver: otherParticipant,
+        message: text
+      },
+      { withCredentials: true }
+    )
+
+    .then((response) => {
+      console.log(response.data)
+      if (response.data === "message_added_successfully") {
+        console.log('Message added')
+      }
+      else{
+
+      }
+    })
+    .catch((error) => console.log("Error" + error));
+
+  }
+
   return (
     <View style={{ flex: 1, backgroundColor: "#fdbe00" }}>
       <MessagingScreenCustomHeader
@@ -467,6 +524,7 @@ export default function MessagingScreen() {
               padding: 8,
               borderRadius: 100,
             }}
+            onPress={sendMessage}
           >
             <TabBarIcon name="send" size={25} color="white" />
           </TouchableOpacity>

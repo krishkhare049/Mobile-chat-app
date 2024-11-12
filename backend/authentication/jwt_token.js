@@ -1,4 +1,5 @@
-const jwt = require("jsonwebtoken");
+// import { sign, verify } from "jsonwebtoken";
+const jwt = require('jsonwebtoken')
 const { JWT_secret_key } = process.env;
 
 // const { random_five_digit } = require("../utils/utils");

@@ -36,7 +36,6 @@
 
 // const styles = StyleSheet.create({});
 
-
 import {
   Image,
   Pressable,
@@ -56,14 +55,14 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../MainComponent";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoggedOut } from "../loggedSlice";
+import axios from "axios";
 
 // import { DrawerParamList } from "./Profile";
 
 type ProfileProps = NativeStackScreenProps<RootStackParamList, "Profile">;
 // type MeProps = NativeStackScreenProps<DrawerParamList, "Me">;
 
-export default function Profile({navigation}: ProfileProps) {
-
+export default function Profile({ navigation }: ProfileProps) {
   // const isLoggedIn = useSelector(selectLogged);
 
   const dispatch = useDispatch();
@@ -72,28 +71,31 @@ export default function Profile({navigation}: ProfileProps) {
 
   const hideDialog = () => setVisible(false);
 
-  const logOutUser = () =>{
-    console.log('Log out user')
-    SecureStore.deleteItemAsync('secure_token')
-    setVisible(false)
+  const logOutUser = () => {
+    console.log("Log out user");
+    SecureStore.deleteItemAsync("secure_token");
+    setVisible(false);
 
-    dispatch(setLoggedOut())
+    // Remove global authorization header-
+     // Set the global authorization header
+     axios.defaults.headers.common['Authorization'] = undefined;
+
+    dispatch(setLoggedOut());
     // navigation.popToTop()
-  }
-
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: "white" }}>
-
       {/* <Surface elevation={4}> */}
-      <Surface elevation={5}
+      <Surface
+        elevation={5}
         style={{
           flexDirection: "row",
           justifyContent: "space-evenly",
           alignItems: "center",
           width: "100%",
           // marginTop: 20,
-          backgroundColor: '#fdbe00',
+          backgroundColor: "#fdbe00",
           // backgroundColor: "#6A5BC2",
           padding: 10,
           borderBottomLeftRadius: 30,
@@ -128,7 +130,6 @@ export default function Profile({navigation}: ProfileProps) {
 
       {/* </Surface> */}
 
-
       <View
         style={{
           justifyContent: "space-evenly",
@@ -157,16 +158,70 @@ export default function Profile({navigation}: ProfileProps) {
           </Text>
         </View>
 
-        <View style={{flexDirection: 'row', flexWrap: 'wrap', width: '80%'}}>
-        <Chip avatar={<TabBarIcon name="pencil" size={15} color="purple" />} style={{margin: 4}} onPress={() => console.log('Pressed')}>Living Life</Chip>
-        <Chip icon="information" style={{margin: 4}} onPress={() => console.log('Pressed')}>Hey!</Chip>
-        <Chip icon="information" style={{margin: 4}} onPress={() => console.log('Pressed')}>Busy</Chip>
-        <Chip icon="information" style={{margin: 4}} onPress={() => console.log('Pressed')}>Influencer</Chip>
-        <Chip icon="information" style={{margin: 4}} onPress={() => console.log('Pressed')}>Family</Chip>
-        <Chip icon="information" style={{margin: 4}} onPress={() => console.log('Pressed')}>Video creator</Chip>
-        <Chip icon="information" style={{margin: 4}} onPress={() => console.log('Pressed')}>Entrepreneur</Chip>
-        <Chip icon="information" style={{margin: 4}} onPress={() => console.log('Pressed')}>Attitude</Chip>
-        <Chip icon="information" style={{margin: 4}} onPress={() => console.log('Pressed')}>Example Chip</Chip>
+        <View style={{ flexDirection: "row", flexWrap: "wrap", width: "80%" }}>
+          <Chip
+            avatar={<TabBarIcon name="pencil" size={15} color="purple" />}
+            style={{ margin: 4 }}
+            onPress={() => console.log("Pressed")}
+          >
+            Living Life
+          </Chip>
+          <Chip
+            icon="information"
+            style={{ margin: 4 }}
+            onPress={() => console.log("Pressed")}
+          >
+            Hey!
+          </Chip>
+          <Chip
+            icon="information"
+            style={{ margin: 4 }}
+            onPress={() => console.log("Pressed")}
+          >
+            Busy
+          </Chip>
+          <Chip
+            icon="information"
+            style={{ margin: 4 }}
+            onPress={() => console.log("Pressed")}
+          >
+            Influencer
+          </Chip>
+          <Chip
+            icon="information"
+            style={{ margin: 4 }}
+            onPress={() => console.log("Pressed")}
+          >
+            Family
+          </Chip>
+          <Chip
+            icon="information"
+            style={{ margin: 4 }}
+            onPress={() => console.log("Pressed")}
+          >
+            Video creator
+          </Chip>
+          <Chip
+            icon="information"
+            style={{ margin: 4 }}
+            onPress={() => console.log("Pressed")}
+          >
+            Entrepreneur
+          </Chip>
+          <Chip
+            icon="information"
+            style={{ margin: 4 }}
+            onPress={() => console.log("Pressed")}
+          >
+            Attitude
+          </Chip>
+          <Chip
+            icon="information"
+            style={{ margin: 4 }}
+            onPress={() => console.log("Pressed")}
+          >
+            Example Chip
+          </Chip>
         </View>
       </View>
 
@@ -343,43 +398,87 @@ export default function Profile({navigation}: ProfileProps) {
             padding: 5,
           }}
         >
-          <TouchableOpacity activeOpacity={0.4} onPress={()=> {setVisible(true)}}>
+          <TouchableOpacity
+            activeOpacity={0.4}
+            onPress={() => {
+              setVisible(true);
+            }}
+          >
             <Text
               style={{
                 color: "#ff0026",
                 fontFamily: "Dosis_500Medium",
                 fontSize: 25,
-              alignSelf: "flex-start",
-
+                alignSelf: "flex-start",
               }}
             >
               Log out
             </Text>
           </TouchableOpacity>
         </View>
-
       </View>
 
       {/* <LogOutCard visibleProp={visible}/> */}
       <Portal>
-      <Dialog visible={visible} onDismiss={hideDialog} style={{backgroundColor: 'royalblue', borderRadius: 20}}>
+        <Dialog
+          visible={visible}
+          onDismiss={hideDialog}
+          style={{ backgroundColor: "royalblue", borderRadius: 20 }}
+        >
+          <View style={{ flexDirection: "row", justifyContent: "center" }}>
+            <TabBarIcon name="logout" color="#FFFFFF" size={30} />
+          </View>
 
-        <View style={{flexDirection: 'row',justifyContent: 'center'}}>
-
-        <TabBarIcon name="logout" color="#FFFFFF" size={30}/>
-        </View>
-            
-        <Dialog.Title style={{fontFamily: 'Dosis_700Bold', color: '#FFFFFF', textAlign: 'center'}}>Log out</Dialog.Title>
-        <Dialog.Content>
-          <Text style={{fontFamily: 'Dosis_400Regular', color: '#FFFFFF', textAlign: 'center', fontSize: 17}}>Are you sure!.</Text>
-          <Text style={{fontFamily: 'Dosis_400Regular', color: '#FFFFFF', textAlign: 'center', fontSize: 17}}>You are going to log out from current account...</Text>
-        </Dialog.Content>
-        <Dialog.Actions>
-          <Button style={{backgroundColor: 'white', borderRadius: 10}} onPress={() => {console.log('Cancel'); setVisible(false)}}><Text style={{color: '#000000'}}>Cancel</Text></Button>
-          <Button style={{backgroundColor: 'red', borderRadius: 10}} onPress={logOutUser}><Text style={{color: '#FFFFFF'}}>Log out!</Text></Button>
-        </Dialog.Actions>
-      </Dialog>
-    </Portal>
+          <Dialog.Title
+            style={{
+              fontFamily: "Dosis_700Bold",
+              color: "#FFFFFF",
+              textAlign: "center",
+            }}
+          >
+            Log out
+          </Dialog.Title>
+          <Dialog.Content>
+            <Text
+              style={{
+                fontFamily: "Dosis_400Regular",
+                color: "#FFFFFF",
+                textAlign: "center",
+                fontSize: 17,
+              }}
+            >
+              Are you sure!.
+            </Text>
+            <Text
+              style={{
+                fontFamily: "Dosis_400Regular",
+                color: "#FFFFFF",
+                textAlign: "center",
+                fontSize: 17,
+              }}
+            >
+              You are going to log out from current account...
+            </Text>
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button
+              style={{ backgroundColor: "white", borderRadius: 10 }}
+              onPress={() => {
+                console.log("Cancel");
+                setVisible(false);
+              }}
+            >
+              <Text style={{ color: "#000000" }}>Cancel</Text>
+            </Button>
+            <Button
+              style={{ backgroundColor: "red", borderRadius: 10 }}
+              onPress={logOutUser}
+            >
+              <Text style={{ color: "#FFFFFF" }}>Log out!</Text>
+            </Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
     </View>
   );
 }

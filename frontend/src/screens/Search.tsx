@@ -1,11 +1,12 @@
 import { FlatList, Pressable, StyleSheet, Text, View, TextInput, StatusBar } from "react-native";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Surface } from "react-native-paper";
 import TabBarIcon from "../components/TabBarIcon";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 // import { RootStackParamList } from "../App";
 import { RootStackParamList } from "../MainComponent";
 import SearchListElement from "../components/SearchListElement";
+import axios from "axios";
 
 // Sample data array
 
@@ -188,23 +189,41 @@ const data = [
 
 type SearchProps = NativeStackScreenProps<RootStackParamList, "Search">;
 
+let API_URL = process.env.EXPO_PUBLIC_API_URL;
+
+
 export default function Search({navigation}: SearchProps) {
 
 
   const [searchQuery, setSearchQuery] = useState("");
 
-  const [searchResults, setSearchResults] = useState(data);
+  // const [searchResults, setSearchResults] = useState(data);
+  const [searchResults, setSearchResults] = useState();
 
   const handleSearch = (text: string) => {
     setSearchQuery(text);
 
-    const filteredData = data.filter((item) =>
-      // item.title.toLowerCase().includes(text.toLowerCase())
-      item.name.toLowerCase().includes(text.toLowerCase())
-    );
+    // const filteredData = data.filter((item) =>
+    //   // item.title.toLowerCase().includes(text.toLowerCase())
+    //   item.name.toLowerCase().includes(text.toLowerCase())
+    // );
 
-    setSearchResults(filteredData);
+    // setSearchResults(filteredData);
+
+    performSearch()
   };
+
+  const skip = useRef(0)
+
+  const performSearch = () =>{
+    axios
+      .get(API_URL + "/api/users/searchUserByName/" + searchQuery + '/' + skip.current, {withCredentials: true})
+      .then((response) => {
+        console.log(response.data)
+        setSearchResults(response.data);
+      })
+      .catch((error) => console.log("Error" + error));
+  }
 
   return (
     <>
@@ -311,8 +330,9 @@ export default function Search({navigation}: SearchProps) {
 
         <FlatList
           data={searchResults}
-          renderItem={({ item }) => <SearchListElement name={item.name} imageUrl={item.imageUrl}/>}
-          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => <SearchListElement name={item.full_name} imageUrl={item.imageUrl}/>}
+          // keyExtractor={(item) => item.id.toString()}
+          // keyExtractor={(item) => item._id}
         />
       </View>
     </>

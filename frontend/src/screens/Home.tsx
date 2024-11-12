@@ -30,8 +30,8 @@ import Notifications from "./Notifications";
 // import TabBarIcon from "../components/TabBarIcon";
 import Chats from "./Chat";
 import Search from "./Search";
-import MessagingScreen from "./MessagingScreen";
 import CustomHeader from "../components/CustomHeader";
+import MessagingScreen from "./MessagingScreen";
 
 
 // import { StatusBar } from "expo-status-bar";
@@ -66,6 +66,7 @@ export default function Home({ navigation }: HomeProps) {
         <HomeStack.Screen
           name="MessagingScreen"
           component={MessagingScreen}
+          initialParams={{ conversationId: '', otherParticipant: '' }}
           options={{
             headerShown: false,
             // header(props) {

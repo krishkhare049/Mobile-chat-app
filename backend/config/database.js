@@ -1,7 +1,7 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 const { MONGO_URI } = process.env;
 
-exports.connect = () => {
+function connect() {
     mongoose.connect(MONGO_URI, {
         // useNewUrlParser: true,
         // useUnifiedTopology: true
@@ -12,3 +12,5 @@ exports.connect = () => {
         console.log("Database connection failed. exiting now...");
     })
 }
+
+module.exports = {connect}

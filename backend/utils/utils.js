@@ -1,4 +1,3 @@
-
 // Remove whitespaces from any string-
 
 function remove_whitespaces(str) {

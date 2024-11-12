@@ -3,7 +3,7 @@ const { verifyToken } = require("../authentication/jwt_token");
 async function extract_token_user_id(req, res, next) {
   // console.log(req.headers);
   let auth_header = req.headers["authorization"];
-  // console.log(auth_header);
+  console.log(auth_header);
 
   if (!auth_header || auth_header == undefined) {
     req.user_id = "no_id";
@@ -34,4 +34,4 @@ async function extract_token_user_id(req, res, next) {
 
 };
 
-module.exports = { extract_token_user_id };
+module.exports = {extract_token_user_id}

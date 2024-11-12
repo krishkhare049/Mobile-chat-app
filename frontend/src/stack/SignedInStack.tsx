@@ -30,6 +30,7 @@ export default function SignedInStack() {
 
     function onConnect() {
       setIsConnected(true);
+      console.log('connected')
       setTransport(socket.io.engine.transport.name);
 
       socket.io.engine.on('upgrade', (transport) => {
@@ -44,6 +45,10 @@ export default function SignedInStack() {
 
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
+
+    socket.on('hi', (msg)=>{
+      console.log(msg);
+    })
 
     return () => {
       socket.off('connect', onConnect);

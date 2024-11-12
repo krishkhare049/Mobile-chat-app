@@ -1,32 +1,36 @@
+// Configuring environment variables
+// require('dotenv').config()
+require('dotenv').config(); // Importing dotenv
 
-// Configuring environment variables-
-require('dotenv').config()
-
-//Connect with database-
+// Connect with database
 require('./config/database').connect()
+const express = require('express'); // Importing express
+const { json } = require('express'); // Importing json middleware from express
+const cors = require('cors'); // Importing cors
+const compression = require('compression'); // Importing compression
+const methodOverride = require('method-override'); // Importing method-override
+const cookieParser = require('cookie-parser'); // Importing cookie-parser
 
-const express = require('express')
-const cors = require('cors')
-const compression = require("compression");
-const methodOverride = require('method-override');
-const cookieParser = require('cookie-parser')
+const {extract_token_user_id} = require('./middlewares/extract_token_user_id'); // Importing middleware
 
-const {extract_token_user_id} = require('./middlewares/extract_token_user_id')
+const authRoutes = require('./routes/authRoutes'); // Importing auth routes
+const userRoutes = require('./routes/userRoutes'); // Importing user routes
+const messageRoutes = require('./routes/messageRoutes'); // Importing message routes
+const conversationRoutes = require('./routes/conversationRoutes'); // Importing conversation routes
+const {restrict_to_logged_in} = require('./middlewares/restrict_to_logged_in'); // Importing restrict middleware
 
-const app = express()
+const app = express(); // Creating an instance of express
 
-// Handle post requests-
-app.use(express.json())
+// Handle post requests
+app.use(json());
 
-// cookies parser-
-app.use(cookieParser())
+// Cookies parser
+app.use(cookieParser());
 
-// Handle put requests-
+// Handle put requests
 app.use(methodOverride("_method"));
 
-
-// Compress all responses-
-// Using it will give error on image/video loading (not in this Todo app)-
+// Compress all responses
 app.use(compression({
     level: 9,
     threshold: 0,
@@ -34,42 +38,54 @@ app.use(compression({
         if (req.headers["x-no-compression"]) {
             return false;
         }
-        return compression.filter(req, res)
+        return compression.filter(req, res); // Use compression.filter instead of _filter
     }
 }));
 
-
-// Cors
-const whitelist = ["http://localhost:5000", "https://mernTodo.com", "http://127.0.0.1:5500", "http://127.0.0.1", "http://192.168.137.1:5000", "http://192.168.179.88:5000"];
-// const whitelist = ["http://localhost:5173"];
+// CORS
+const whitelist = [
+    "http://localhost:5000",
+    "https://mernTodo.com",
+    "http://127.0.0.1:5500",
+    "http://127.0.0.1",
+    "http://192.168.137.1:5000",
+    "http://192.168.179.88:5000"
+];
 
 let corsOptions = {
     origin: function (origin, callback) {
         if (whitelist.indexOf(origin) !== -1 || !origin) {
             callback(null, true);
-        }
-        else {
-            // callback(new Error("Not allowed by CORS"))
+        } else {
             callback(null, false);
-        };
+        }
     },
     credentials: true
 };
 
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions)); // include before other routes
+app.options("*", cors(corsOptions)); // Include before other routes
 
-// Extract token and user_id-
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
+
+// Extract token and user_id
 app.use(extract_token_user_id);
 
+// Use authentication routes
+app.use('/api/auth', authRoutes);
 
-// GET ROUTES-
-require("./routes/api/get_api/getUserMsgs")(app);
-require("./routes/api/get_api/getUserData")(app);
+// Use users routes (Protected)
+app.use('/api/users', restrict_to_logged_in, userRoutes);
 
-// POST ROUTES-
-require("./routes/api/post_api/create_and_login_api")(app);
-require("./routes/api/post_api/tasks_update_delete_more_api")(app);
-require("./routes/api/post_api/user_data_post_api")(app);
+// Use messages routes (Protected)
+app.use('/api/messages', restrict_to_logged_in, messageRoutes);
 
-module.exports = app;
+// Use conversations routes (Protected)
+app.use('/api/conversations', restrict_to_logged_in, conversationRoutes);
+
+// Export app to server.js
+module.exports = app; // Exporting the app

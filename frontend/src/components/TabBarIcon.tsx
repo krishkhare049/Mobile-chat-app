@@ -76,6 +76,10 @@ export default function TabBarIcon({
       return <FontAwesome name="smile-o" size={size} color={color} />;
     case "mic":
       return <Ionicons name="mic" size={size} color={color} />;
+    case "check":
+      return <MaterialCommunityIcons name="check" size={size} color={color} />;
+    case "checkAll":
+      return <MaterialCommunityIcons name="check-all" size={size} color={color} />;
     // break;
 
     default:

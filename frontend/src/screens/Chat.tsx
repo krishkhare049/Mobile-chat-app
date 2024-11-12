@@ -14,185 +14,81 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 // import { RootStackParamList } from "../App";
 import { RootStackParamList } from "../MainComponent";
 
-
 import { useScrollToTop } from "@react-navigation/native";
 
 import MessagesCardElement from "../components/MessagesCardElement";
 import PressableIcon from "../components/PressableIcon";
 import axios from "axios";
+import { string } from "yup";
+import NoConversations from "../components/NoConversations";
 // import { StatusBar } from "expo-status-bar";
 
 type ChatProps = NativeStackScreenProps<RootStackParamList, "Chats">;
 
+let API_URL = process.env.EXPO_PUBLIC_API_URL;
+
+
 const data = [
   {
-    id: 1,
-    name: "Name",
-    lastMsg: "last message",
-    imageUrl:
-      "https://images.pexels.com/photos/26893131/pexels-photo-26893131/free-photo-of-village-houses-behind-trees.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
-  },
-  {
-    id: 1,
-    name: "Name",
-    lastMsg: "last message",
-    imageUrl:
-      "https://images.pexels.com/photos/26893131/pexels-photo-26893131/free-photo-of-village-houses-behind-trees.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
-  },
-  {
-    id: 1,
-    name: "Name",
-    lastMsg: "last message",
-    imageUrl:
-      "https://images.pexels.com/photos/26893131/pexels-photo-26893131/free-photo-of-village-houses-behind-trees.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
-  },
-  {
-    id: 1,
-    name: "Name",
-    lastMsg: "last message",
-    imageUrl:
-      "https://images.pexels.com/photos/26893131/pexels-photo-26893131/free-photo-of-village-houses-behind-trees.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
-  },
-  {
-    id: 1,
-    name: "Name",
-    lastMsg: "last message",
-    imageUrl:
-      "https://images.pexels.com/photos/26893131/pexels-photo-26893131/free-photo-of-village-houses-behind-trees.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
-  },
-  {
-    id: 1,
-    name: "Name",
-    lastMsg: "last message",
-    imageUrl:
-      "https://images.pexels.com/photos/26893131/pexels-photo-26893131/free-photo-of-village-houses-behind-trees.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
-  },
-  {
-    id: 1,
-    name: "Name",
-    lastMsg: "last message",
-    imageUrl:
-      "https://images.pexels.com/photos/26893131/pexels-photo-26893131/free-photo-of-village-houses-behind-trees.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
-  },
-  {
-    id: 1,
-    name: "Name",
-    lastMsg: "last message",
-    imageUrl:
-      "https://images.pexels.com/photos/26893131/pexels-photo-26893131/free-photo-of-village-houses-behind-trees.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
-  },
-  {
-    id: 1,
-    name: "Name",
-    lastMsg: "last message",
-    imageUrl:
-      "https://images.pexels.com/photos/26893131/pexels-photo-26893131/free-photo-of-village-houses-behind-trees.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
-  },
-  {
-    id: 1,
-    name: "Name",
-    lastMsg: "last message",
-    imageUrl:
-      "https://images.pexels.com/photos/26893131/pexels-photo-26893131/free-photo-of-village-houses-behind-trees.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
-  },
-  {
-    id: 1,
-    name: "Name",
-    lastMsg: "last message",
-    imageUrl:
-      "https://images.pexels.com/photos/26893131/pexels-photo-26893131/free-photo-of-village-houses-behind-trees.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
-  },
-  {
-    id: 1,
-    name: "Name",
-    lastMsg: "last message",
-    imageUrl:
-      "https://images.pexels.com/photos/26893131/pexels-photo-26893131/free-photo-of-village-houses-behind-trees.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
-  },
-  {
-    id: 1,
-    name: "Name",
-    lastMsg: "last message",
-    imageUrl:
-      "https://images.pexels.com/photos/26893131/pexels-photo-26893131/free-photo-of-village-houses-behind-trees.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
-  },
-  {
-    id: 1,
-    name: "Name",
-    lastMsg: "last message",
-    imageUrl:
-      "https://images.pexels.com/photos/26893131/pexels-photo-26893131/free-photo-of-village-houses-behind-trees.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
-  },
-  // {
-  //   id: 2,
-  //   name: "Riya Gupta",
-  //   lastMsg: "see you tomorrow",
-  //   imageUrl:
-  //     "https://images.pexels.com/photos/26893131/pexels-photo-26893131/free-photo-of-village-houses-behind-trees.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
-  // },
-  // {
-  //   id: 3,
-  //   name: "Riya Gupta",
-  //   lastMsg: "see you tomorrow",
-  //   imageUrl:
-  //     "https://images.pexels.com/photos/26893131/pexels-photo-26893131/free-photo-of-village-houses-behind-trees.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
-  // },
-  // {
-  //   id: 4,
-  //   name: "Riya Gupta",
-  //   lastMsg: "see you tomorrow",
-  //   imageUrl:
-  //     "https://images.pexels.com/photos/26893131/pexels-photo-26893131/free-photo-of-village-houses-behind-trees.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
-  // },
-  // {
-  //   id: 5,
-  //   name: "Riya Gupta",
-  //   lastMsg: "see you tomorrow",
-  //   imageUrl:
-  //     "https://images.pexels.com/photos/26893131/pexels-photo-26893131/free-photo-of-village-houses-behind-trees.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
-  // },
-  // {
-  //   id: 6,
-  //   name: "Riya Gupta",
-  //   lastMsg: "see you tomorrow",
-  //   imageUrl:
-  //     "https://images.pexels.com/photos/26893131/pexels-photo-26893131/free-photo-of-village-houses-behind-trees.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
-  // },
-  // {
-  //   id: 7,
-  //   name: "Riya Gupta",
-  //   lastMsg: "see you tomorrow",
-  //   imageUrl:
-  //     "https://images.pexels.com/photos/26893131/pexels-photo-26893131/free-photo-of-village-houses-behind-trees.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
-  // },
-  {
-    id: 8,
-    name: "Riya Gupta",
-    lastMsg: "see you tomorrow",
+    conversationId: "9lkjfs30ru",
+    otherParticipantName: "Riya Gupta",
+    otherParticipant: "fdkjslfjewkjkl",
+    lastMessage: "see you tomorrow",
     imageUrl:
       "https://images.pexels.com/photos/26893131/pexels-photo-26893131/free-photo-of-village-houses-behind-trees.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load",
   },
 ];
 
+type conversationProps = {
+  conversationId: string;
+  otherParticipantName: string;
+  otherParticipant: string;
+  lastMessage: string;
+  imageUrl: string;
+};
+
 export default function Chats({ navigation }: ChatProps) {
+  const [conversationsData, setconversationsData] = useState<
+    conversationProps[]
+  >([]);
   const [jsonData, setJsonData] = useState(null);
 
-  const refreshData = () =>{
-    axios
-    .get("https://jsonplaceholder.typicode.com/todos/")
-    .then((response) => {
-      setJsonData(response.data);
-    });
-  }
+  const skip = useRef(0);
 
-  useEffect(() => {
-    // axios.get('https://jsonplaceholder.typicode.com/todos/').then((response)=>{
+  const loadConversations = () => {
     axios
-      .get("https://jsonplaceholder.typicode.com/todos/2")
+      .get(API_URL + "/api/users/getUserConversations/" + skip.current, {withCredentials: true})
       .then((response) => {
-        setJsonData(response.data);
-      });
-  }, []);
+        console.log(response.data)
+        setconversationsData(response.data);
+      })
+      .catch((error) => console.log("Error" + error));
+  };
+
+  // useEffect(() => {
+  //   // Load conversations-
+  //   loadConversations();
+  // });
+
+  const refreshData = () => {
+    // axios
+    //   .get("https://jsonplaceholder.typicode.com/todos/")
+    //   .then((response) => {
+    //     setJsonData(response.data);
+    //   });
+
+      loadConversations()
+      console.log(conversationsData.length)
+  };
+
+  // useEffect(() => {
+  //   // axios.get('https://jsonplaceholder.typicode.com/todos/').then((response)=>{
+  //   axios
+  //     .get("https://jsonplaceholder.typicode.com/todos/2")
+  //     .then((response) => {
+  //       setJsonData(response.data);
+  //     });
+  // }, []);
 
   const ScrollRef = useRef(null);
 
@@ -204,7 +100,7 @@ export default function Chats({ navigation }: ChatProps) {
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    refreshData()
+    refreshData();
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);
@@ -212,7 +108,7 @@ export default function Chats({ navigation }: ChatProps) {
 
   return (
     <>
-      <SafeAreaView style={{ flex: 1 }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
         <View style={{ flex: 1, justifyContent: "center" }}>
           <View
             style={{
@@ -319,14 +215,36 @@ export default function Chats({ navigation }: ChatProps) {
 
             {/* <MessagesCardElement name="Name" lastMsg="Last msg..." imageUrl="https://images.pexels.com/photos/26893131/pexels-photo-26893131/free-photo-of-village-houses-behind-trees.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load" onClick={()=>{navigation.push('MessagingScreen')}} /> */}
 
+            {conversationsData.length !== 0 ? 
+
             <FlatList
-              data={data}
-              renderItem={({item}) => <MessagesCardElement name={item.name} lastMsg={item.lastMsg} imageUrl={item.imageUrl} onClick={()=> navigation.push('MessagingScreen')}/>}
+              // data={conversationsData}
+              data={conversationsData}
+              renderItem={({ item }) => (
+                <MessagesCardElement
+                  conversationId={item.conversationId}
+                  otherParticipant={item.otherParticipant}
+                  otherParticipantName={item.otherParticipantName}
+                  lastMessage={item.lastMessage}
+                  imageUrl={item.imageUrl}
+                  onClick={() =>
+                    navigation.push("MessagingScreen", {
+                      conversationId: item.conversationId,
+                      otherParticipant: item.otherParticipant,
+                    })
+                  }
+                />
+              )}
               // keyExtractor={item => item.id}
               initialNumToRender={10}
-              keyExtractor={(item) => item.id.toString()} // Ensure to return a string
+              // keyExtractor={(item) => item.conversationId.toString()} // Ensure to return a string
+              keyExtractor={(item) => item.conversationId} // Ensure to return a string
               scrollEnabled={false}
-              />
+            />
+            :
+            <NoConversations/>
+}
+
             <FlatList
               data={jsonData}
               renderItem={({ item }) => (

@@ -1,19 +1,19 @@
 // Hashing plain text password into hash-
 
-const bcrypt = require("bcrypt");
+import { hash, compare } from "bcrypt";
 const saltRounds = 10;
 // const myPlaintextPassword = "s0/\/\P4$$w0rD";
 // const myPlaintextPassword = "krishkhare";
 // const someOtherPlaintextPassword = "not_bacon";
 
 const hashPassword = async (PlaintextPassword) => {
-    let passwordHash = await bcrypt.hash(PlaintextPassword, saltRounds);
+    let passwordHash = await hash(PlaintextPassword, saltRounds);
     console.log(passwordHash);
     return passwordHash;
 };
 
 const comparePassword = async (PlaintextPassword, passwordHash) => {
-    let match = await bcrypt.compare(PlaintextPassword, passwordHash);
+    let match = await compare(PlaintextPassword, passwordHash);
     console.log(match);
     return match;
 };
@@ -27,7 +27,7 @@ console.log(ismatch);
 
 
 
-module.exports = {
+export default {
     hashPassword,
     comparePassword,
 };

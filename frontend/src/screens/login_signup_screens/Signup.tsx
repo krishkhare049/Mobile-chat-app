@@ -53,7 +53,8 @@ export default function Signup({ navigation }: SignupProps) {
     axios
       .post(
         // "http://localhost:5000/createAccount",
-        API_URL + "/createAccount",
+        // API_URL + "/createAccount",
+        API_URL + "/api/auth/signup",
         {
           full_name: newName,
           user_email: newEmail,
