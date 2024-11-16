@@ -28,9 +28,9 @@ export default function MessagingScreenCustomHeader({
         // paddingLeft: 15,
         paddingVertical: 5,
         // backgroundColor: "#fdbe00",
-        position: 'absolute',
+        position: "absolute",
         top: 0,
-        width: '100%',
+        width: "100%",
         zIndex: 5,
       }}
     >
@@ -48,8 +48,7 @@ export default function MessagingScreenCustomHeader({
               : "transparent",
             borderRadius: 100,
             padding: 5,
-            marginLeft: 10
-
+            marginLeft: 10,
           },
         ]}
       >
@@ -61,12 +60,24 @@ export default function MessagingScreenCustomHeader({
         />
       </Pressable>
 
-      <Image
+      {imageUrl !== "default_profile_image" ? (
+        <Image
+          style={styles.img}
+          source={{
+            uri: imageUrl,
+          }}
+          defaultSource={require("../assets/skeletonLoadingPlaceholder.gif")}
+        />
+      ) : (
+        <TabBarIcon name="defaultProfileIcon" size={30} color="white" />
+      )}
+
+      {/* <Image
         style={styles.img}
         source={{
           uri: imageUrl,
         }}
-      />
+      /> */}
 
       <Text
         style={{
@@ -77,7 +88,6 @@ export default function MessagingScreenCustomHeader({
           fontFamily: "Dosis_700Bold",
           // backgroundColor: 'red',
         }}
-        
       >
         {name}
       </Text>
@@ -92,7 +102,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 2,
     borderColor: "#FFFFFF",
-    marginLeft: 10
-
+    marginLeft: 10,
   },
 });

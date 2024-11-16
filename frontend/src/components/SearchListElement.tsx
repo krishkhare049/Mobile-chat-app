@@ -1,12 +1,13 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
+import TabBarIcon from "./TabBarIcon";
 
 type SearchListElementProps = {
   name: string;
-  imageUrl: string;
+  profileImageUrl: string;
 //   lastMsg: string;
 
-//   onClick: ()=> void;
+  onClick: ()=> void;
 //   bgColor: string | undefined;
 //   pressedColor: string | 'black';
 //   customStyle: object | undefined;
@@ -14,9 +15,9 @@ type SearchListElementProps = {
 
 export default function SearchListElement({
   name,
-  imageUrl,
+  profileImageUrl,
 //   lastMsg,
-//   onClick
+  onClick
 //   bgColor,
 //   pressedColor,
 //   customStyle
@@ -56,26 +57,45 @@ export default function SearchListElement({
           // borderColor: pressed ? 'whitesmoke' : 'whitesmoke',
           // backgroundColor: 'white',
           borderColor: 'whitesmoke',
-          borderTopWidth: 2,
+          // borderTopWidth: 2,
+          borderBottomWidth: 2,
           // transform: pressed ? [{scale: 0.98}]: []
 
         }
         
       // ]}
       }
+      onPress={onClick}
       // onLongPress={()=>{console.log('Long press')}}
       onLongPress={handleLongPress}
 
       onPressOut={handlePressOut}
     >
-      <View style={styles.contactsItems}>
+      <View style={styles.searchItems}>
+
+        <View style={styles.profileImgView}>
+
+        {profileImageUrl !== 'default_profile_image' ? 
         <Image
+        style={styles.profileImg}
+        source={{
+          uri: profileImageUrl,
+        }}
+        defaultSource={require('../assets/skeletonLoadingPlaceholder.gif')}
+        />
+        : 
+        <TabBarIcon name="defaultProfileIcon" size={30} color="#193088" />
+        }
+
+        </View>
+
+        {/* <Image
           style={styles.contactsImg}
           source={{
-            uri: imageUrl,
+            uri: profileImageUrl,
           }}
           defaultSource={require('../assets/skeletonLoadingPlaceholder.gif')}
-        />
+        /> */}
 
         <View style={styles.nameOccDiv}>
           <Text style={styles.name}>{name}</Text>
@@ -87,7 +107,7 @@ export default function SearchListElement({
 }
 
 const styles = StyleSheet.create({
-  contactsItems: {
+  searchItems: {
     // flex: 1,
     flexDirection: "row",
     justifyContent: "center",
@@ -121,11 +141,19 @@ const styles = StyleSheet.create({
     fontFamily: "Dosis_400Regular",
     width: '80%'
   },
-  contactsImg: {
-    width: 40,
-    height: 40,
+
+  profileImgView: {
+    width: 45,
+    height: 45,
     borderRadius: 100,
-    borderWidth: 2,
-    borderColor: "#FFFFFF",
+    borderWidth: 1,
+    borderColor: "whitesmoke",
+    backgroundColor: "#fdbe00",
+
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  profileImg: {
+
   },
 });

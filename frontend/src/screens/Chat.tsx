@@ -7,12 +7,14 @@ import {
   Image,
   RefreshControl,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
 import React, { useCallback, useRef, useState, useEffect } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 // import { RootStackParamList } from "../App";
 import { RootStackParamList } from "../MainComponent";
+import { axiosInstance } from "../utilities/axiosInstance";
 
 import { useScrollToTop } from "@react-navigation/native";
 
@@ -24,9 +26,6 @@ import NoConversations from "../components/NoConversations";
 // import { StatusBar } from "expo-status-bar";
 
 type ChatProps = NativeStackScreenProps<RootStackParamList, "Chats">;
-
-let API_URL = process.env.EXPO_PUBLIC_API_URL;
-
 
 const data = [
   {
@@ -40,35 +39,96 @@ const data = [
 ];
 
 type conversationProps = {
+  conversations: any;
+  full_name: string;
+  _id: string;
+  profile_image_filename: any;
+  otherParticipantProfileImage: string;
+  lastUpdated: string;
+  otherParticipantId: string;
+  conversationFieldElementId: string;
   conversationId: string;
   otherParticipantName: string;
-  otherParticipant: string;
   lastMessage: string;
   imageUrl: string;
 };
+
+// Response sample-
+// [
+//   {
+//     _id: "6734383c1118c4e77c614cd4",
+//     conversations: {
+//       _id: "6736dd43ce74a547b35579e0",
+//       conversationId: "6736dd43ce74a547b35579dd",
+//       createdAt: "2024-11-15T05:33:55.946Z",
+//       lastMessage: "Hey",
+//       lastUpdated: "2024-11-15T05:33:55.938Z",
+//       otherParticipant: "6734a0ddae228530d3da294b",
+//     },
+//     userConversations: {
+//       __v: 0,
+//       _id: "6736dd43ce74a547b35579dd",
+//       createdAt: "2024-11-15T05:33:55.930Z",
+//       messageIds: [Array],
+//       participants: [Array],
+//       updatedAt: "2024-11-15T05:33:55.930Z",
+//     },
+//   },
+//   {
+//     _id: "673439306753481edabf3d93",
+//     conversations: {
+//       _id: "6734a0ddae228530d3da294d",
+//       conversationId: "6734a0ddae228530d3da294b",
+//       createdAt: "2024-11-13T12:51:41.555Z",
+//       lastMessage: "Hi Riya 😊",
+//       lastUpdated: "2024-11-13T12:51:41.548Z",
+//       otherParticipant: "673439306753481edabf3d93",
+//     },
+//     full_name: "Krish Khare 2",
+//     profile_image_filename: { filename: "default_profile_image" },
+//     userConversations: {
+//       __v: 0,
+//       _id: "6734a0ddae228530d3da294b",
+//       createdAt: "2024-11-13T12:51:41.545Z",
+//       messageIds: [Array],
+//       participants: [Array],
+//       updatedAt: "2024-11-13T14:02:01.997Z",
+//     },
+//   },
+// ];
 
 export default function Chats({ navigation }: ChatProps) {
   const [conversationsData, setconversationsData] = useState<
     conversationProps[]
   >([]);
   const [jsonData, setJsonData] = useState(null);
+  const [loadingChats, setLoadingChats] = useState(true);
 
   const skip = useRef(0);
 
   const loadConversations = () => {
-    axios
-      .get(API_URL + "/api/users/getUserConversations/" + skip.current, {withCredentials: true})
-      .then((response) => {
-        console.log(response.data)
-        setconversationsData(response.data);
+    // console.log(skip.current)
+    axiosInstance
+      .get("/api/users/getUserConversations/" + skip.current, {
+        withCredentials: true,
       })
-      .catch((error) => console.log("Error" + error));
+      .then((response) => {
+        console.log(response.data);
+        setconversationsData(response.data);
+
+        setLoadingChats(false);
+      })
+      .catch((error) => {
+        console.log("Error" + error);
+        setLoadingChats(false)
+
+      });
   };
 
-  // useEffect(() => {
-  //   // Load conversations-
-  //   loadConversations();
-  // });
+  useEffect(() => {
+    // Load conversations-
+    loadConversations();
+  }, []);
 
   const refreshData = () => {
     // axios
@@ -77,8 +137,8 @@ export default function Chats({ navigation }: ChatProps) {
     //     setJsonData(response.data);
     //   });
 
-      loadConversations()
-      console.log(conversationsData.length)
+    loadConversations();
+    console.log(conversationsData.length);
   };
 
   // useEffect(() => {
@@ -108,7 +168,7 @@ export default function Chats({ navigation }: ChatProps) {
 
   return (
     <>
-      <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
         <View style={{ flex: 1, justifyContent: "center" }}>
           <View
             style={{
@@ -215,35 +275,53 @@ export default function Chats({ navigation }: ChatProps) {
 
             {/* <MessagesCardElement name="Name" lastMsg="Last msg..." imageUrl="https://images.pexels.com/photos/26893131/pexels-photo-26893131/free-photo-of-village-houses-behind-trees.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load" onClick={()=>{navigation.push('MessagingScreen')}} /> */}
 
-            {conversationsData.length !== 0 ? 
+            {loadingChats && (
+              <ActivityIndicator
+                size={50}
+                color={"#000000"}
+                style={{ margin: 10 }}
+              />
+            )}
 
-            <FlatList
-              // data={conversationsData}
-              data={conversationsData}
-              renderItem={({ item }) => (
-                <MessagesCardElement
-                  conversationId={item.conversationId}
-                  otherParticipant={item.otherParticipant}
-                  otherParticipantName={item.otherParticipantName}
-                  lastMessage={item.lastMessage}
-                  imageUrl={item.imageUrl}
-                  onClick={() =>
-                    navigation.push("MessagingScreen", {
-                      conversationId: item.conversationId,
-                      otherParticipant: item.otherParticipant,
-                    })
-                  }
-                />
-              )}
-              // keyExtractor={item => item.id}
-              initialNumToRender={10}
-              // keyExtractor={(item) => item.conversationId.toString()} // Ensure to return a string
-              keyExtractor={(item) => item.conversationId} // Ensure to return a string
-              scrollEnabled={false}
-            />
-            :
-            <NoConversations/>
-}
+            {conversationsData.length !== 0 ? (
+              // conversationId: userChatConversations[0].conversations._id,
+              // otherParticipantId: userChatConversations[0].conversations.otherParticipant,
+              // lastUpdated: userChatConversations[0].conversations.lastUpdated,
+              // lastMessage: userChatConversations[0].conversations.lastMessage,
+              // conversationFieldElementId: userChatConversations[0].conversations._id,
+              // otherParticipantName: otherUser.full_name,
+              // otherParticipantProfileImage: otherUser.profile_image_filename
+              <FlatList
+                // data={conversationsData}
+                data={conversationsData}
+                renderItem={({ item }) => (
+                  <MessagesCardElement
+                    conversationId={item.conversations.conversationId}
+                    otherParticipantId={item.conversations.otherParticipant}
+                    otherParticipantName={item.full_name}
+                    lastMessage={item.conversations.lastMessage}
+                    lastUpdated={item.conversations.lastUpdated}
+                    conversationFieldElementId={item._id}
+                    imageUrl={item.profile_image_filename.filename}
+                    onClick={() =>
+                      navigation.push("MessagingScreen", {
+                        conversationId: item.conversations.conversationId,
+                        otherParticipantId: item.conversations.otherParticipant,
+                        otherParticipantName: item.full_name,
+                        imageUrl: item.profile_image_filename.filename,
+                      })
+                    }
+                  />
+                )}
+                // keyExtractor={item => item.id}
+                initialNumToRender={10}
+                // keyExtractor={(item) => item.conversationId.toString()} // Ensure to return a string
+                keyExtractor={(item) => item._id} // Ensure to return a string
+                scrollEnabled={false}
+              />
+            ) : (
+              <NoConversations />
+            )}
 
             <FlatList
               data={jsonData}

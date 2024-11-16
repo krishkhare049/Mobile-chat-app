@@ -1,12 +1,13 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import TabBarIcon from "./TabBarIcon";
+import formatTime from "../utilities/formatDate";
 
-export default function Message({isSender, message}: {isSender: boolean, message: string}) {
+export default function Message({isSender, text, createdAt}: {isSender: boolean, text: string, createdAt: string}) {
   return (
     <View style={[styles.container, isSender ? styles.sender : styles.receiver]}>
 
-    <Text style={styles.text}>{message}</Text>
+    <Text style={styles.text}>{text}</Text>
 
     {isSender ? (
 
@@ -16,12 +17,12 @@ export default function Message({isSender, message}: {isSender: boolean, message
       <View style={{marginRight: 5}}>
       <TabBarIcon name="check" size={15} color="gray"/>
       </View>
-      <Text style={styles.time}>{new Date().toLocaleTimeString()}</Text>
+      <Text style={styles.time}>{formatTime(createdAt)}</Text>
       </View>
 
     ) : (
         <View>
-        <Text style={styles.time}>{new Date().toLocaleTimeString()}</Text>
+        <Text style={styles.time}>{formatTime(createdAt)}</Text>
 
         {/* <Image */}
             </View>
@@ -42,7 +43,8 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     borderRadius: 40,
     maxWidth: "70%",
-    minWidth: 150
+    // minWidth: 150
+    minWidth: 50
   },
 
   sender: {

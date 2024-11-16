@@ -56,6 +56,7 @@ import { RootStackParamList } from "../MainComponent";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoggedOut } from "../loggedSlice";
 import axios from "axios";
+import { axiosInstance } from "../utilities/axiosInstance";
 
 // import { DrawerParamList } from "./Profile";
 
@@ -78,7 +79,7 @@ export default function Profile({ navigation }: ProfileProps) {
 
     // Remove global authorization header-
      // Set the global authorization header
-     axios.defaults.headers.common['Authorization'] = undefined;
+     axiosInstance.defaults.headers.common['Authorization'] = undefined;
 
     dispatch(setLoggedOut());
     // navigation.popToTop()

@@ -10,6 +10,7 @@ import { RootStackParamList } from '../MainComponent'
 // import LogOutCard from '../components/LogOutCard'
 
 import { socket } from '../socket';
+import axios from 'axios'
 
 
 // import * as NavigationBar from 'expo-navigation-bar';

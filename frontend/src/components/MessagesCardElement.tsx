@@ -1,12 +1,15 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
+import TabBarIcon from "./TabBarIcon";
 
 type MessagesCardElementProps = {
   conversationId: string;
-  otherParticipant: string;
+  otherParticipantId: string;
   otherParticipantName: string;
+  lastUpdated: string;
   imageUrl: string;
   lastMessage: string;
+  conversationFieldElementId: string;
 
   onClick: ()=> void;
 //   bgColor: string | undefined;
@@ -16,15 +19,19 @@ type MessagesCardElementProps = {
 
 export default function MessagesCardElement({
   conversationId,
-  otherParticipant,
+  otherParticipantId,
   otherParticipantName,
+  lastUpdated,
   imageUrl,
   lastMessage,
+  conversationFieldElementId,
   onClick
 //   bgColor,
 //   pressedColor,
 //   customStyle
 }: MessagesCardElementProps) {
+
+  console.log(otherParticipantName)
 
 
     const [pressed, setPressed] = useState(false);
@@ -75,13 +82,29 @@ export default function MessagesCardElement({
       onPressOut={handlePressOut}
     >
       <View style={styles.contactsItems}>
-        <Image
+        {/* <Image
           style={styles.contactsImg}
           source={{
             uri: imageUrl,
           }}
           defaultSource={require('../assets/skeletonLoadingPlaceholder.gif')}
-        />
+        /> */}
+
+<View style={styles.profileImgView}>
+
+{imageUrl !== 'default_profile_image' ? 
+<Image
+style={styles.profileImg}
+source={{
+  uri: imageUrl,
+}}
+defaultSource={require('../assets/skeletonLoadingPlaceholder.gif')}
+/>
+: 
+<TabBarIcon name="defaultProfileIcon" size={30} color="#193088" />
+}
+
+</View>
 
         <View style={styles.nameOccDiv}>
           <Text style={styles.name}>{otherParticipantName}</Text>
@@ -126,11 +149,25 @@ const styles = StyleSheet.create({
     fontFamily: "Dosis_400Regular",
     width: '80%'
   },
-  contactsImg: {
-    width: 60,
-    height: 60,
+  // contactsImg: {
+  //   width: 60,
+  //   height: 60,
+  //   borderRadius: 100,
+  //   borderWidth: 2,
+  //   borderColor: "#FFFFFF",
+  // },
+  profileImgView: {
+    width: 45,
+    height: 45,
     borderRadius: 100,
-    borderWidth: 2,
-    borderColor: "#FFFFFF",
+    borderWidth: 1,
+    borderColor: "whitesmoke",
+    backgroundColor: "#fdbe00",
+
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  profileImg: {
+
   },
 });

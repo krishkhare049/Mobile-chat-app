@@ -25,12 +25,13 @@ import axios from "axios";
 import * as SecureStore from "expo-secure-store";
 import { useDispatch } from "react-redux";
 import { setLoggedIn } from "../../loggedSlice";
+import { axiosInstance } from "../../utilities/axiosInstance";
 
 
 type SignupProps = NativeStackScreenProps<RootStackParamList, "Signup">;
 
-const env = process.env.NODE_ENV;
-let API_URL = process.env.EXPO_PUBLIC_API_URL;
+// const env = process.env.NODE_ENV;
+// let API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 // if(env==='development' && Platform.OS === 'android'){
 //   API_URL = 'http://10.0.2.2:5000'
@@ -50,11 +51,11 @@ export default function Signup({ navigation }: SignupProps) {
   // console.log(API_URL)
 
   const createAccount = () => {
-    axios
+    axiosInstance
       .post(
         // "http://localhost:5000/createAccount",
         // API_URL + "/createAccount",
-        API_URL + "/api/auth/signup",
+        "/api/auth/signup",
         {
           full_name: newName,
           user_email: newEmail,

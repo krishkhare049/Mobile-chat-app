@@ -76,7 +76,14 @@ export type RootStackParamList = {
   Chats: undefined;
   // MessagingScreen: {otherParticipant: string};
   // MessagingScreen: {conversationId: string, receiver: string};
-  MessagingScreen: {conversationId: string, otherParticipant: string} | undefined;
+  MessagingScreen:
+    | {
+        conversationId: string;
+        otherParticipantId: string;
+        otherParticipantName: string;
+        imageUrl: string;
+      }
+    | undefined;
   Search: undefined;
 
   Notes: undefined;
@@ -106,6 +113,7 @@ import SignedInStack from "./stack/SignedInStack";
 import SignedOutStack from "./stack/SignedOutStack";
 import SplashScreen from "./screens/SplashScreen";
 import axios from "axios";
+import { axiosInstance } from "./utilities/axiosInstance";
 
 export async function saveToExpoSec(key: string, value: string) {
   await SecureStore.setItemAsync(key, value);
@@ -143,9 +151,11 @@ const checkToken = async () => {
   try {
     const token = await SecureStore.getItemAsync("secure_token");
 
-    if(token){
+    if (token) {
       // Set the global authorization header
-      axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+      // axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+      axiosInstance.defaults.headers.common["Authorization"] =
+        "Bearer " + token;
     }
 
     return token !== null;

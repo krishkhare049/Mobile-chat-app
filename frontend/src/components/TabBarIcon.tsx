@@ -80,6 +80,8 @@ export default function TabBarIcon({
       return <MaterialCommunityIcons name="check" size={size} color={color} />;
     case "checkAll":
       return <MaterialCommunityIcons name="check-all" size={size} color={color} />;
+    case "defaultProfileIcon":
+      return <FontAwesome name="user-o" size={size} color={color} />;
     // break;
 
     default:

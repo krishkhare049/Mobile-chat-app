@@ -13,3 +13,5 @@ Some screeenshots and video giving below of my mobile chat app-
 <img src="md/7.jpg">
 <img src="md/8.jpg">
 <img src="md/vid.gif">
+
+<!-- Send log in to access data from every route if user is not found (if necessary) to log out from app -->

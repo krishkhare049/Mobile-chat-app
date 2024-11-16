@@ -1,9 +1,9 @@
 const { Schema, model } = require('mongoose'); // Importing Schema and model from mongoose
 
 const messageSchema = new Schema({
-    sender: { type: Schema.Types.ObjectId, ref: 'User ' },
-    receiver: { type: Schema.Types.ObjectId, ref: 'User ' },
-    message: { type: String, required: true },
+    sender: { type: Schema.Types.ObjectId, ref: 'User' },
+    receiver: { type: Schema.Types.ObjectId, ref: 'User' },
+    text: { type: String, required: true },
     // timestamp: { type: Date, default: Date.now }
 }, { timestamps: true });
 

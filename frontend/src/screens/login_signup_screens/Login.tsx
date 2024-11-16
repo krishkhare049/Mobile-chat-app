@@ -13,18 +13,17 @@ import {
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import CustomButton from "../../components/CustomButton";
-import { Link } from "@react-navigation/native";
+// import { Link } from "@react-navigation/native";
 // import { RootStackParamList } from "../../App";
 import { RootStackParamList } from "../../MainComponent";
-
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Surface } from "react-native-paper";
-import axios from "axios";
+// import { Surface } from "react-native-paper";
+// import axios from "axios";
 
 type LoginProps = NativeStackScreenProps<RootStackParamList, "Login">;
 
-const env = process.env.NODE_ENV;
-let API_URL = process.env.EXPO_PUBLIC_API_URL;
+// const env = process.env.NODE_ENV;
+// let API_URL = process.env.EXPO_PUBLIC_API_URL;
 
 // if(env==='development' && Platform.OS === 'android'){
 //   API_URL = 'http://10.0.2.2:5000'
@@ -33,6 +32,7 @@ let API_URL = process.env.EXPO_PUBLIC_API_URL;
 import * as SecureStore from "expo-secure-store";
 import { useDispatch } from "react-redux";
 import { setLoggedIn } from "../../loggedSlice";
+import { axiosInstance } from "../../utilities/axiosInstance";
 
 
 export default function Login({ navigation }: LoginProps) {
@@ -45,11 +45,11 @@ export default function Login({ navigation }: LoginProps) {
   const [clickedOnLogin, setClickedOnLogin] = useState(false);
 
   const loginAccount = () => {
-    axios
+    axiosInstance
       .post(
         // "http://localhost:5000/createAccount",
         // API_URL + "/logInToAccount",
-        API_URL + "/api/auth/login",
+      "/api/auth/login",
         {
           login_email: loginEmail,
           login_password: loginPassword,

@@ -3,6 +3,7 @@ const router = express.Router();
 const conversationController = require('../controllers/conversationController');
 
 router.get('/getConversationAllMessages/:conversationId/:skip', conversationController.getConversationAllMessages);
+router.get('/getConversationAllMessagesByParticipants/:otherParticipantId/:skip', conversationController.getConversationAllMessagesByParticipants);
 // router.get()
 // router.get()
 // router.get()

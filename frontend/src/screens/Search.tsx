@@ -1,4 +1,12 @@
-import { FlatList, Pressable, StyleSheet, Text, View, TextInput, StatusBar } from "react-native";
+import {
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  StatusBar,
+} from "react-native";
 import React, { useRef, useState } from "react";
 import { Surface } from "react-native-paper";
 import TabBarIcon from "../components/TabBarIcon";
@@ -7,6 +15,8 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../MainComponent";
 import SearchListElement from "../components/SearchListElement";
 import axios from "axios";
+import MessagingScreen from "./MessagingScreen";
+import { axiosInstance } from "../utilities/axiosInstance"
 
 // Sample data array
 
@@ -186,19 +196,22 @@ const data = [
   },
 ];
 
-
 type SearchProps = NativeStackScreenProps<RootStackParamList, "Search">;
 
-let API_URL = process.env.EXPO_PUBLIC_API_URL;
+type searchResultsProps = {
+  _id: string;
+  full_name: string;
+  profile_image_filename: {filename: string};
+  user_email: string;
+};
 
-
-export default function Search({navigation}: SearchProps) {
-
-
+export default function Search({ navigation }: SearchProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
   // const [searchResults, setSearchResults] = useState(data);
-  const [searchResults, setSearchResults] = useState();
+  const [searchResults, setSearchResults] = useState<
+  searchResultsProps[]
+>([])
 
   const handleSearch = (text: string) => {
     setSearchQuery(text);
@@ -210,24 +223,40 @@ export default function Search({navigation}: SearchProps) {
 
     // setSearchResults(filteredData);
 
-    performSearch()
+    performSearch();
   };
 
-  const skip = useRef(0)
+  // const skip = useRef(0);
+  const performSearch = () => {
 
-  const performSearch = () =>{
-    axios
-      .get(API_URL + "/api/users/searchUserByName/" + searchQuery + '/' + skip.current, {withCredentials: true})
+    const query = searchQuery.trim() || 'default'
+
+    console.log('searchQuery::::::::::::::::::::::::::::::::::::::')
+    console.log(searchQuery)
+
+    if(query === 'default'){
+      setSearchResults([])
+      return;
+    }
+    axiosInstance
+      .get("/api/users/searchUserByName/" +
+          // searchQuery,
+          query,
+          // +
+          // "/" +
+          // skip.current,
+        { withCredentials: true }
+      )
       .then((response) => {
-        console.log(response.data)
+        console.log(response.data);
         setSearchResults(response.data);
       })
-      .catch((error) => console.log("Error" + error));
-  }
+      // .catch((error) => console.log("Error" + error));
+  };
 
   return (
     <>
-    <StatusBar backgroundColor={'white'} barStyle={'dark-content'}/>
+      <StatusBar backgroundColor={"white"} barStyle={"dark-content"} />
       <Surface
         elevation={3}
         style={{
@@ -256,9 +285,7 @@ export default function Search({navigation}: SearchProps) {
               // padding: 5,
               // borderRadius: 10,
               //   ...customStyle,
-              backgroundColor: pressed
-                ? "whitesmoke"
-                : "white",
+              backgroundColor: pressed ? "whitesmoke" : "white",
               borderRadius: 100,
               padding: 5,
             },
@@ -278,9 +305,9 @@ export default function Search({navigation}: SearchProps) {
           placeholder="Search friends, people, contacts..."
           value={searchQuery}
           onChangeText={handleSearch}
-          cursorColor={'#193088'}
+          cursorColor={"#193088"}
         />
-          {/* <TextInput
+        {/* <TextInput
             style={styles.inputBar}
             underlineStyle={{ display: "none" }}
             value={searchQuery}
@@ -327,10 +354,22 @@ export default function Search({navigation}: SearchProps) {
       </Surface>
 
       <View style={styles.container}>
-
         <FlatList
           data={searchResults}
-          renderItem={({ item }) => <SearchListElement name={item.full_name} imageUrl={item.imageUrl}/>}
+          renderItem={({ item }) => (
+            <SearchListElement
+              name={item.full_name}
+              profileImageUrl={item.profile_image_filename.filename}
+              onClick={() => {
+                navigation.push("MessagingScreen", {
+                  conversationId: 'find_through_page_using_otherParticipant',
+                  otherParticipantId: item._id,
+                  otherParticipantName: item.full_name,
+                  imageUrl: item.profile_image_filename.filename
+                });
+              }}
+            />
+          )}
           // keyExtractor={(item) => item.id.toString()}
           // keyExtractor={(item) => item._id}
         />
@@ -345,7 +384,7 @@ const styles = StyleSheet.create({
     // padding: 15,
     backgroundColor: "white",
     // marginTop: 10
-    zIndex: 1
+    zIndex: 1,
   },
   inputBar: {
     // paddingHorizontal: 10,
@@ -360,7 +399,7 @@ const styles = StyleSheet.create({
     padding: 10,
     // borderColor: "white",
     borderColor: "gainsboro",
-    width: '70%',
+    width: "70%",
     // width: "100%",
     // maxWidth: 270,
     color: "#193088",

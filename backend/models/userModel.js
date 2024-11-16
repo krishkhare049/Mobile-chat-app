@@ -15,10 +15,15 @@ const userSchema = new Schema({
     // last_name: String,
     user_email: String,
     user_password: String,
+    // User profile and cover images
+
+    profile_image_filename: { type: Object, default: { filename: "default_profile_image" } },
+
+    cover_image_filename: { type: Object, default: { filename: "default_cover_image" } },
     // msgs: Array,
     conversations: [{
         conversationId: { type: Schema.Types.ObjectId, ref: 'Conversation' },
-        otherParticipant: { type: Schema.Types.ObjectId, ref: 'User ' },
+        otherParticipant: { type: Schema.Types.ObjectId, ref: 'User' },
         createdAt: { type: Date, default: Date.now },
         lastUpdated: { type: Date },
         lastMessage: { type: String, ref: 'Message' }
@@ -39,7 +44,7 @@ userSchema.methods.generateAuthToken = async function () {
             _id: this._id.toString(),
             random_id: random_five_digit() // Just to ensure more uniqueness of token
         }, JWT_secret_key);
-        
+
         // Adding token in token of tokens field
         this.tokens = this.tokens.concat({ token: token });
 
@@ -60,6 +65,6 @@ userSchema.pre("save", async function (next) {
     next();
 });
 
-const User = model("User ", userSchema);
+const User = model("User", userSchema);
 
 module.exports = User; // Exporting the User model
